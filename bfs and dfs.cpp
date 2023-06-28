@@ -36,6 +36,7 @@ void bfs(int node)
 /* DIJKISTRA 
   TC O(V+Elog(E))
   SC O(V);
+  DIJISTRA IS VALID ONLY FOR GRAPHS WITH NON NEGATIVE EDGES.
 */
 vi dij(vector<vector<pair<int,int>>>adj,int node)
 {
@@ -60,4 +61,37 @@ vi dij(vector<vector<pair<int,int>>>adj,int node)
 		}
 	}
 	return ans;
+}
+/*
+   FLOYD WARSHALLS ALGORITHM
+   TC O(N^3)
+   SC O(N^2)
+   Used to find shortest path to every node from every node
+   Can be used to find if there is anynegative cycle present .
+   If negative cycle is present then dist[i][i] becomes negative for some node
+*/
+vii floyd(vvi adj)
+{
+    vii dist(n+1,vi(n+1,1e9));
+    for(int i=1;i<=n;i++)
+    {
+        for(int j=1;j<=n;j++)
+        {
+            if(i==j)dist[i][j]=0;
+            else if(adj[i][j]!=-1)dist[i][j]=adj[i][j];
+        }
+    }
+    for(int via=1;via<=n;via++)
+    {
+        for(int i=1;i<=n;i++)
+        {
+            for(int j=1;j<=n;j++)
+            {
+                dist[i][j]=min(dist[i][j],dist[i][via]+dist[via][j]);
+            }
+        }
+    }
+    return dist;
+    
+
 }
