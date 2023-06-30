@@ -1,12 +1,27 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define int long long
+#define fast ios_base::sync_with_stdio(0); cin.tie(0);cout.tie(0)
+#define ff first
+#define ss second
+#define pb(x) push_back(x)
+#define vi vector<int>
+#define vvi vector<vector<int>>
+#define pii pair<int,int>
+
+
+vvi adj(1e5+1);//assuming no of vertices<=1e5
+int n;//no of vertices
+
 /* DFS 
   TC O(V+E)
   SC O(V)auxilary stack space+O(V)
 */
-void dfs(int node ,int par)
+void dfs(int node ,vi &vis)
 {
     for(auto it:adj[node])
     {
-        if(it!=par)dfs(it,node);
+        if(vis[it]==0){vis[it]=1;dfs(it,vis);}
     }
 }
 /* BFS 
@@ -36,7 +51,7 @@ void bfs(int node)
 /* DIJKISTRA 
   TC O(V+Elog(E))
   SC O(V);
-  DIJISTRA IS VALID ONLY FOR GRAPHS WITH NON NEGATIVE EDGES.
+  DIJKISTRA IS VALID ONLY FOR GRAPHS WITH NON NEGATIVE EDGES.
 */
 vi dij(vector<vector<pair<int,int>>>adj,int node)
 {
@@ -70,9 +85,9 @@ vi dij(vector<vector<pair<int,int>>>adj,int node)
    Can be used to find if there is anynegative cycle present .
    If negative cycle is present then dist[i][i] becomes negative for some node
 */
-vii floyd(vvi adj)
+vvi floyd(vvi adj)
 {
-    vii dist(n+1,vi(n+1,1e9));
+    vvi dist(n+1,vi(n+1,1e9));
     for(int i=1;i<=n;i++)
     {
         for(int j=1;j<=n;j++)
@@ -92,6 +107,37 @@ vii floyd(vvi adj)
         }
     }
     return dist;
-    
-
+}
+vi toposort(vvi adj)
+{
+    vi indeg(n+1,0);
+    for(int i=1;i<=n;i++)
+    {
+        for(auto it:adj[i])indeg[it]++;
+    }
+    queue<int>q;
+	for(int i=1;i<=n;i++)
+	{
+		if(indeg[i]==0)q.push(i);
+	}
+	vi ans;
+	while(q.size())
+	{
+		int x=q.front();
+		q.pop();
+		ans.pb(x);
+		for(auto it:adj[x])
+		{
+			indeg[it]--;
+			if(indeg[it]==0)q.push(it);
+		}
+	}
+    int n1=ans.size();
+	if(n1!=n){return {-1};}
+    //It is not possible i.e there is a cycle detected somewhere in a graph
+	return ans;
+}
+int32_t main()
+{  
+   //take inputs of vertices and adjacency list;
 }
