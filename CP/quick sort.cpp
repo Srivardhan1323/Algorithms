@@ -25,6 +25,6 @@ int  main()
     vector<int>v(n);
     for(int i=0;i<n;i++)cin>>v[i];
     quicksort(0,n-1,v);
-    // for(auto it:v)cout<<it<<" ";
+    for(auto it:v)cout<<it<<" ";
     
 }
